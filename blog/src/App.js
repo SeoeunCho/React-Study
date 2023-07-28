@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
   let [postTitle, changeTitle] = useState(['남자 코트 추천', '강남 우동맛집', '파이썬독학']);
-  let [likes, likeCount] = useState(0);
+  let [likes, likeCount] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ function App() {
       <div className="black-nav">
         <h4>ReactBlog</h4>
       </div>
-      <div className="list">
+      {/* <div className="list">
         <button
           onClick={() => {
             let copy = [...postTitle];
@@ -54,7 +54,25 @@ function App() {
           {postTitle[2]}
         </h4>
         <p>2월 17일 발행</p>
-      </div>
+      </div> */}
+
+      {postTitle.map((el, i) => {
+        return (
+          <div className="list">
+            <h4 style={{ display: 'flex' }}>
+              <span onClick={() => {setModal(!modal);}}>{postTitle[i]}</span>
+              <span style={{ cursor: 'pointer' }} 
+                onClick={() => {
+                  let copy = [...likes];
+                  copy[i]++;
+                  likeCount(copy);
+                }}>👍
+              </span>{likes[i]}
+            </h4>
+            <p>2월 17일 발행</p>
+          </div>
+        );
+      })}
 
       {modal ? <Modal /> : null}
     </div>
