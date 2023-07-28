@@ -6,7 +6,8 @@ function App() {
   let [postTitle, changeTitle] = useState(['남자 코트 추천', '강남 우동맛집', '파이썬독학']);
   let [likes, likeCount] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
-  let [titleIdx, changeTitleIdx] = useState(0)
+  let [titleIdx, changeTitleIdx] = useState(0);
+  let [inputVal, changeInputVal] = useState('');
 
   return (
     <div className="App">
@@ -48,6 +49,13 @@ function App() {
                   </span>
                   
                   {likes[i]}
+                  <button onClick={(e) => {
+                      e.stopPropagation();
+                      let copy = [...postTitle];
+                      copy.splice(i, 1);
+                      changeTitle(copy);
+                    }}>글삭제
+                  </button>
                 </span>
               </h4>
               <p>2월 17일 발행</p>
@@ -56,7 +64,13 @@ function App() {
         })
       }
 
-      <input type="text" onChange={(e) => { console.log(e.target.value) }} />
+      <input type="text" onChange={(e) => {changeInputVal(e.target.value)}} />
+        <button onClick={() => {
+            let copy = [...postTitle];
+            copy.push(inputVal);
+            changeTitle(copy);
+          }}>글추가
+        </button>
       
       {
         modal ? <Modal postTitle={ postTitle } titleIdx={ titleIdx }/> : null
