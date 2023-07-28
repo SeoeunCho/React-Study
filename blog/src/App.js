@@ -34,15 +34,21 @@ function App() {
         postTitle.map((el, i) => {
           return (
             <div className="list">
-              <h4 style={{ display: 'flex' }}>
-                <span onClick={() => { setModal(!modal); changeTitleIdx(i); }}>{postTitle[i]}</span>
-                <span style={{ cursor: 'pointer' }} 
-                  onClick={() => {
-                    let copy = [...likes];
-                    copy[i]++;
-                    likeCount(copy);
-                  }}>👍
-                </span>{likes[i]}
+              <h4>
+                <span onClick={() => { setModal(!modal); changeTitleIdx(i); }}>
+                  {postTitle[i]}
+
+                  <span style={{ cursor: 'pointer' }} 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      let copy = [...likes];
+                      copy[i]++;
+                      likeCount(copy);
+                    }}>👍
+                  </span>
+                  
+                  {likes[i]}
+                </span>
               </h4>
               <p>2월 17일 발행</p>
             </div>
@@ -50,6 +56,7 @@ function App() {
         })
       }
 
+      <input type="text" onChange={(e) => { console.log(e.target.value) }} />
       
       {
         modal ? <Modal postTitle={ postTitle } titleIdx={ titleIdx }/> : null
