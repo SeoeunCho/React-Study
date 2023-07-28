@@ -6,6 +6,7 @@ function App() {
   let [postTitle, changeTitle] = useState(['남자 코트 추천', '강남 우동맛집', '파이썬독학']);
   let [likes, likeCount] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
+  let [titleIdx, changeTitleIdx] = useState(0)
 
   return (
     <div className="App">
@@ -34,7 +35,7 @@ function App() {
           return (
             <div className="list">
               <h4 style={{ display: 'flex' }}>
-                <span onClick={() => {setModal(!modal);}}>{postTitle[i]}</span>
+                <span onClick={() => { setModal(!modal); changeTitleIdx(i); }}>{postTitle[i]}</span>
                 <span style={{ cursor: 'pointer' }} 
                   onClick={() => {
                     let copy = [...likes];
@@ -51,7 +52,7 @@ function App() {
 
       
       {
-        modal ? <Modal postTitle={ postTitle } changeTitle={ changeTitle }/> : null
+        modal ? <Modal postTitle={ postTitle } titleIdx={ titleIdx }/> : null
       }
     </div>
   );
@@ -60,10 +61,10 @@ function App() {
 function Modal(props) {
   return (
     <div className="modal">
-      <h4>{props.postTitle[0]}</h4>
+      <h4>{ props.postTitle[props.titleIdx] }</h4>
       <p>날짜</p>
       <p>상세내용</p>
-      <button onClick={() => {props.changeTitle(['여자 코트 추천', '강남 우동맛집', '파이썬독학'])}}>글수정</button>
+      <button>글수정</button>
     </div>
   );
 }
