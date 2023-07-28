@@ -12,79 +12,58 @@ function App() {
       <div className="black-nav">
         <h4>ReactBlog</h4>
       </div>
-      {/* <div className="list">
-        <button
-          onClick={() => {
-            let copy = [...postTitle];
-            copy[0] = '여자 코트 추천';
-            changeTitle(copy);
-          }}>
-          제목수정
-        </button>
-        <button
-          onClick={() => {
-            let copy = [...postTitle];
-            copy.sort();
-            changeTitle(copy);
-          }}>
-          가나다순 정렬
-        </button>
-        <h4>
-          {postTitle[0]}
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              likeCount(likes++);
-            }}>
-            👍
-          </span>
-          {likes}
-        </h4>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h4>{postTitle[1]}</h4>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h4
-          onClick={() => {
-            setModal(!modal);
-          }}>
-          {postTitle[2]}
-        </h4>
-        <p>2월 17일 발행</p>
-      </div> */}
+      <button 
+        onClick={() => {
+          let copy = [...postTitle];
+          copy[0] = '여자 코트 추천';
+          changeTitle(copy);
+        }}> 
+        제목수정
+      </button>
+      <button
+        onClick={() => {
+          let copy = [...postTitle];
+          copy.sort();
+          changeTitle(copy);
+        }}>
+        가나다순 정렬
+      </button>
 
-      {postTitle.map((el, i) => {
-        return (
-          <div className="list">
-            <h4 style={{ display: 'flex' }}>
-              <span onClick={() => {setModal(!modal);}}>{postTitle[i]}</span>
-              <span style={{ cursor: 'pointer' }} 
-                onClick={() => {
-                  let copy = [...likes];
-                  copy[i]++;
-                  likeCount(copy);
-                }}>👍
-              </span>{likes[i]}
-            </h4>
-            <p>2월 17일 발행</p>
-          </div>
-        );
-      })}
+      {
+        postTitle.map((el, i) => {
+          return (
+            <div className="list">
+              <h4 style={{ display: 'flex' }}>
+                <span onClick={() => {setModal(!modal);}}>{postTitle[i]}</span>
+                <span style={{ cursor: 'pointer' }} 
+                  onClick={() => {
+                    let copy = [...likes];
+                    copy[i]++;
+                    likeCount(copy);
+                  }}>👍
+                </span>{likes[i]}
+              </h4>
+              <p>2월 17일 발행</p>
+            </div>
+          );
+        })
+      }
 
-      {modal ? <Modal /> : null}
+      
+      {
+        modal ? <Modal postTitle={ postTitle } changeTitle={ changeTitle }/> : null
+      }
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
     <div className="modal">
-      <h4>제목</h4>
+      <h4>{props.postTitle[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      <button onClick={() => {props.changeTitle(['여자 코트 추천', '강남 우동맛집', '파이썬독학'])}}>글수정</button>
     </div>
   );
 }
