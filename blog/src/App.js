@@ -5,6 +5,7 @@ import './App.css';
 function App() {
   let [postTitle, changeTitle] = useState(['남자 코트 추천', '강남 우동맛집', '파이썬독학']);
   let [likes, likeCount] = useState(0);
+  let [modal, setModal] = useState(false);
 
   return (
     <div className="App">
@@ -46,11 +47,16 @@ function App() {
         <p>2월 17일 발행</p>
       </div>
       <div className="list">
-        <h4>{postTitle[2]}</h4>
+        <h4
+          onClick={() => {
+            setModal(!modal);
+          }}>
+          {postTitle[2]}
+        </h4>
         <p>2월 17일 발행</p>
       </div>
 
-      <Modal></Modal>
+      {modal ? <Modal /> : null}
     </div>
   );
 }
