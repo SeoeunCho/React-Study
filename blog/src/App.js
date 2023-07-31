@@ -104,8 +104,6 @@ function App() {
       </div>
 
       {modal ? <Modal postTitle={postTitle} titleIdx={titleIdx} /> : null}
-
-      <Modal2></Modal2>
     </div>
   );
 }
@@ -119,29 +117,6 @@ function Modal(props) {
       <button>글수정</button>
     </div>
   );
-}
-
-class Modal2 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: 'kim',
-      age: 20,
-    };
-  }
-  render() {
-    return (
-      <div>
-        안녕 {this.state.age} {this.props}
-        <button
-          onClick={() => {
-            this.setState({ age: 21 });
-          }}>
-          버튼
-        </button>
-      </div>
-    );
-  }
 }
 
 export default App;
