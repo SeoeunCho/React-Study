@@ -8,27 +8,24 @@ function App() {
   let [modal, setModal] = useState(false);
   let [titleIdx, changeTitleIdx] = useState(0);
   let [inputVal, changeInputVal] = useState('');
+  let [date, setDate] = useState('2월 17일 발행');
 
   return (
     <div className="App">
       <div className="black-nav">
         <h4>ReactBlog</h4>
       </div>
-      <button 
-        onClick={() => {
-          let copy = [...postTitle];
-          copy[0] = '여자 코트 추천';
-          changeTitle(copy);
-        }}> 
-        제목수정
+      <button onClick={() => {
+        let copy = [...postTitle];
+        copy[0] = '여자 코트 추천';
+        changeTitle(copy);
+      }}>제목수정
       </button>
-      <button
-        onClick={() => {
-          let copy = [...postTitle];
-          copy.sort();
-          changeTitle(copy);
-        }}>
-        가나다순 정렬
+      <button onClick={() => {
+        let copy = [...postTitle];
+        copy.sort();
+        changeTitle(copy);
+      }}>가나다순 정렬
       </button>
 
       {
@@ -58,19 +55,29 @@ function App() {
                   </button>
                 </span>
               </h4>
-              <p>2월 17일 발행</p>
+              <p>{date}</p>
             </div>
           );
         })
       }
 
-      <input type="text" onChange={(e) => {changeInputVal(e.target.value)}} />
+      <div>
+        <input type="text" onChange={(e) => {changeInputVal(e.target.value)}} />
         <button onClick={() => {
+          if (inputVal) {
             let copy = [...postTitle];
-            copy.push(inputVal);
+            copy.unshift(inputVal);
             changeTitle(copy);
-          }}>글추가
+          } else {
+            alert('제목을 한글자 이상 입력해주세요.');
+          }
+          
+          let copy2 = [...likes];
+          copy2.unshift(0);
+          likeCount(copy2);
+        }}>글발행
         </button>
+      </div>
       
       {
         modal ? <Modal postTitle={ postTitle } titleIdx={ titleIdx }/> : null
