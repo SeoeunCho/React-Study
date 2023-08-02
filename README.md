@@ -12,3 +12,5 @@
 - 자주 필요한 JavaScript ES6 문법들
 - lazy loading 등 간단한 성능개선법
 - 서버프로젝트와 리액트 연동
+
+🔗 https://codingapple.com/course/react-basic/
