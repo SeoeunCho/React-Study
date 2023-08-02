@@ -48,7 +48,7 @@ function App() {
               <div className="container pt-4">
                 <div className="row">
                   {shoes.map((el) => {
-                    return <Card shoes={el} idx={el.id}></Card>;
+                    return <Card key={el.id} shoes={el} idx={el.id}></Card>;
                   })}
                 </div>
               </div>
