@@ -45,7 +45,7 @@ function App() {
                 }}>
                 이름순
               </Button>
-              <div className="container">
+              <div className="container pt-4">
                 <div className="row">
                   {shoes.map((el) => {
                     return <Card shoes={el} idx={el.id}></Card>;
