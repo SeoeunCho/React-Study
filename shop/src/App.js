@@ -1,13 +1,13 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   return (
@@ -35,17 +35,27 @@ function App() {
           element={
             <>
               <div className="main-bg"></div>
+              <Button
+                variant="secondary"
+                className="mt-4"
+                onClick={() => {
+                  let copy = [...shoes];
+                  copy.sort((a, b) => (a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1));
+                  setShoes(copy);
+                }}>
+                이름순
+              </Button>
               <div className="container">
                 <div className="row">
-                  {shoes.map((el, i) => {
-                    return <Card shoes={el} idx={i}></Card>;
+                  {shoes.map((el) => {
+                    return <Card shoes={el} idx={el.id}></Card>;
                   })}
                 </div>
               </div>
             </>
           }
         />
-        <Route path="/detail" element={<Detail shoes={shoes}></Detail>} />
+        <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>} />
