@@ -3,10 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import data from './data.js';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import Detail from './pages/Detail';
 
 function App() {
   let [shoes] = useState(data);
+  let navigate = useNavigate();
 
   return (
     <div className="App">
@@ -16,31 +18,42 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/detail">Detail</Nav.Link>
-            <Nav.Link href="/">About</Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                navigate('/about');
+              }}>
+              About
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
       <Routes>
-        <Route path="/" element={<Main shoes={shoes}></Main>} />
-        <Route path="/detail" element={<div>상세페이지임</div>} />
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="main-bg"></div>
+              <div className="container">
+                <div className="row">
+                  {shoes.map((el, i) => {
+                    return <Card shoes={el} idx={i}></Card>;
+                  })}
+                </div>
+              </div>
+            </>
+          }
+        />
+        <Route path="/detail" element={<Detail shoes={shoes}></Detail>} />
+
+        <Route path="/about" element={<About />}>
+          <Route path="member" element={<div>member</div>} />
+          <Route path="location" element={<div>location</div>} />
+        </Route>
+
+        <Route path="*" element={<div>404 없는페이지입니다.</div>} />
       </Routes>
     </div>
-  );
-}
-
-function Main(props) {
-  return (
-    <>
-      <div className="main-bg"></div>
-      <div className="container">
-        <div className="row">
-          {props.shoes.map((el, i) => {
-            return <Card shoes={el} idx={i}></Card>;
-          })}
-        </div>
-      </div>
-    </>
   );
 }
 
@@ -50,6 +63,15 @@ function Card(props) {
       <img src={`https://codingapple1.github.io/shop/shoes${props.idx + 1}.jpg`} width="80%" alt="" />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}</p>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div>
+      <h4>회사정보</h4>
+      <Outlet></Outlet>
     </div>
   );
 }
