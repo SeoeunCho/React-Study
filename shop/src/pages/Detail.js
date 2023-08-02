@@ -47,9 +47,9 @@ function Detail(props) {
 
   return (
     <div className="container">
-      {timer ? <div className="alert alert-warning">2초 이내 구매시 할인</div> : null}
+      {/* {timer ? <div className="alert alert-warning">2초 이내 구매시 할인</div> : null}
       {count}
-      <button onClick={() => { setCount(count + 1); }}>버튼</button>
+      <button onClick={() => { setCount(count + 1); }}>버튼</button> */}
 
       {/* <Box>
         <Btn bgColor="yellow">버튼</Btn>
@@ -63,7 +63,7 @@ function Detail(props) {
           <img src={`https://codingapple1.github.io/shop/shoes${Number(id) + 1}.jpg`} width="100%" alt="" />
         </div>
         <div className="col-md-6 mt-4">
-          <input type="text" onChange={e => {setInputVal(e.target.value)}}></input>
+          {/* <input type="text" onChange={e => {setInputVal(e.target.value)}}></input> */}
           <h4 className="pt-5">{detailData.title}</h4>
           <p>{detailData.content}</p>
           <p>{detailData.price}</p>
