@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-let Btn = styled.button`
+/* let Btn = styled.button`
   background: ${(props) => props.bgColor};
   color: ${(props) => (props.bgColor === 'blue' ? 'white' : 'black')};
   padding: 10px;
@@ -15,7 +15,7 @@ let NewBtn = styled(Btn)`
 let Box = styled.div`
   background: grey;
   padding: 20px;
-`;
+`; */
 
 function Detail(props) {
   let [count, setCount] = useState(0);
@@ -47,30 +47,23 @@ function Detail(props) {
 
   return (
     <div className="container">
-      {timer ? <div className="alert alert-warning">2초이내 구매시 할인</div> : null}
+      {timer ? <div className="alert alert-warning">2초 이내 구매시 할인</div> : null}
       {count}
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}>
-        버튼
-      </button>
+      <button onClick={() => { setCount(count + 1); }}>버튼</button>
+
       {/* <Box>
         <Btn bgColor="yellow">버튼</Btn>
         <Btn bgColor="orange">버튼</Btn>
         <Btn bgColor="blue">버튼</Btn>
         <NewBtn>버튼</NewBtn>
       </Box> */}
+
       <div className="row">
         <div className="col-md-6 pt-5">
           <img src={`https://codingapple1.github.io/shop/shoes${Number(id) + 1}.jpg`} width="100%" alt="" />
         </div>
         <div className="col-md-6 mt-4">
-          <input
-            type="text"
-            onChange={(e) => {
-              setInputVal(e.target.value);
-            }}></input>
+          <input type="text" onChange={e => {setInputVal(e.target.value)}}></input>
           <h4 className="pt-5">{detailData.title}</h4>
           <p>{detailData.content}</p>
           <p>{detailData.price}</p>
