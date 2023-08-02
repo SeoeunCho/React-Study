@@ -18,6 +18,7 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/detail">Detail</Nav.Link>
+            <Nav.Link href="/event">Event</Nav.Link>
             <Nav.Link
               onClick={() => {
                 navigate('/about');
@@ -51,6 +52,11 @@ function App() {
           <Route path="location" element={<div>location</div>} />
         </Route>
 
+        <Route path="/event" element={<Event />}>
+          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
+          <Route path="two" element={<div>생일기념 쿠폰받기</div>}></Route>
+        </Route>
+
         <Route path="*" element={<div>404 없는페이지입니다.</div>} />
       </Routes>
     </div>
@@ -63,6 +69,15 @@ function Card(props) {
       <img src={`https://codingapple1.github.io/shop/shoes${props.idx + 1}.jpg`} width="80%" alt="" />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}</p>
+    </div>
+  );
+}
+
+function Event() {
+  return (
+    <div>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
     </div>
   );
 }
