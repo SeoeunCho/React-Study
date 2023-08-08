@@ -23,6 +23,7 @@ function Detail(props) {
   let [inputVal, setInputVal] = useState('');
   let { id } = useParams();
   let detailData = props.shoes.find((el) => el.id === Number(id));
+  console.log('props.shoes', props.shoes, detailData);
 
   /**
    * 1. useEffect(() => {  }) : 재렌더링마다 코드실행하고 싶을 때

@@ -5,10 +5,14 @@ import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
+import axios from 'axios';
 
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+  let [count, setCount] = useState(1);
+  let [more, setMore] = useState(true);
+  let [load, setLoad] = useState(false);
 
   return (
     <div className="App">
@@ -47,11 +51,68 @@ function App() {
               </Button>
               <div className="container pt-4">
                 <div className="row">
+                {load ? <Loading /> : ''}
                   {shoes.map((el) => {
-                    return <Card key={el.id} shoes={el} idx={el.id}></Card>;
+                    return <Card shoes={el} idx={el.id} key={el.id}></Card>;
                   })}
                 </div>
               </div>
+              {more ? (
+                <button
+                  onClick={() => {
+                    count++;
+                    setCount(count);
+                    setLoad(true);
+
+                    /** AJAX : 서버에 GET,POST 요청할 때 새로고침 없이 데이터를 주고받을 수 있게 도와주는 브라우저 기능
+                     *
+                     * AJAX로 GET/POST 요청하는 방법
+                     *
+                     * 1. XMLHttpRequest 라는 옛날 문법 사용
+                     * 2. fetch() 라는 최신문법 사용
+                     * 3. axios 같은 외부 라이브러리 사용
+                     *
+                     * axios 라이브러리 : JSON -> object/array 변환작업을 자동으로 해줌
+                     * POST 요청 : axios.post('URL', { name: 'kim' }).then(() => {});
+                     */
+
+                    axios
+                      .get(`https://codingapple1.github.io/shop/data${count}.json`)
+                      .then((res) => {
+                        if (res) {
+                          setTimeout(() => {
+                            setLoad(false);
+                          }, 1000);
+                        }
+
+                        if (count === 2) {
+                          let copy = [...shoes, ...res.data];
+                          setShoes(copy);
+                        } else if (count === 3) {
+                          let copy = [...shoes, ...res.data];
+                          setShoes(copy);
+                          setMore(false);
+                        }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+
+                    /** fetch() : 자바스크립트 함수
+                     * axios와 다르게 JSON -> object/array 변환작업을 해주지 않아서 직접 바꾸는 작업이 필요함
+                     * 예시)
+                     * fetch('URL').then((res) => res.json()).then((res) => console.log(res)); */
+
+                    /** Promise.all : 동시에 여러 개의 AJAX 요청 할 때
+                     * 예시)
+                     * Promise.all([axios.get('/url1'), axios.get('/url2')]).then(() => {});
+                     */
+                  }}>
+                  더보기
+                </button>
+              ) : (
+                ''
+              )}
             </>
           }
         />
@@ -99,6 +160,10 @@ function About() {
       <Outlet></Outlet>
     </div>
   );
+}
+
+function Loading() {
+  return <div>로딩중입니다.</div>;
 }
 
 export default App;
