@@ -51,14 +51,14 @@ function App() {
               </Button>
               <div className="container pt-4">
                 <div className="row">
-                {load ? <Loading /> : ''}
+                  {load ? <Loading /> : ''}
                   {shoes.map((el) => {
                     return <Card shoes={el} idx={el.id} key={el.id}></Card>;
                   })}
                 </div>
               </div>
               {more ? (
-                <button
+                <Button
                   onClick={() => {
                     count++;
                     setCount(count);
@@ -109,25 +109,21 @@ function App() {
                      */
                   }}>
                   더보기
-                </button>
-              ) : (
-                ''
-              )}
+                </Button>
+              ) : null}
             </>
           }
         />
-        <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
 
+        <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>} />
           <Route path="location" element={<div>location</div>} />
         </Route>
-
         <Route path="/event" element={<Event />}>
           <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
           <Route path="two" element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
-
         <Route path="*" element={<div>404 없는페이지입니다.</div>} />
       </Routes>
     </div>
