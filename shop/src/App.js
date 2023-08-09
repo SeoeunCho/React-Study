@@ -1,11 +1,13 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
 import axios from 'axios';
+
+export let Context1 = createContext();
 
 function App() {
   let [shoes, setShoes] = useState(data);
@@ -13,6 +15,7 @@ function App() {
   let [count, setCount] = useState(1);
   let [more, setMore] = useState(true);
   let [load, setLoad] = useState(false);
+  let [extra] = useState([10, 11, 12]);
 
   return (
     <div className="App">
@@ -115,7 +118,15 @@ function App() {
           }
         />
 
-        <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
+        <Route
+          path="/detail/:id"
+          element={
+            <Context1.Provider value={{ extra, shoes }}>
+              <Detail shoes={shoes} />
+            </Context1.Provider>
+          }
+        />
+
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>} />
           <Route path="location" element={<div>location</div>} />

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Nav } from 'react-bootstrap';
+import { Context1 } from './../App.js';
 
 /* let Btn = styled.button`
   background: ${(props) => props.bgColor};
@@ -19,6 +20,8 @@ let Box = styled.div`
 `; */
 
 function Detail(props) {
+  let { extra } = useContext(Context1);
+
   let [count, setCount] = useState(0);
   let [timer, setTimer] = useState(true);
   let [inputVal, setInputVal] = useState('');
@@ -115,6 +118,7 @@ function Detail(props) {
 
 function TabContent({ tab }) {
   let [fade2, setFade2] = useState('');
+  let { extra } = useContext(Context1);
 
   useEffect(() => {
     setTimeout(() => {
@@ -125,7 +129,7 @@ function TabContent({ tab }) {
       setFade2('');
     };
   }, [tab]);
-  return <div className={`start ${fade2}`}>{[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab]}</div>;
+  return <div className={`start ${fade2}`}>{[<div>{extra}</div>, <div>내용1</div>, <div>내용2</div>][tab]}</div>;
 }
 
 export default Detail;
