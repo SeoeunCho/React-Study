@@ -25,6 +25,7 @@ function Detail(props) {
   let { id } = useParams();
   let detailData = props.shoes.find((el) => el.id === Number(id));
   let [tab, setTab] = useState(0);
+  let [fade, setFade] = useState('');
 
   /**
    * 1. useEffect(() => {  }) : 재렌더링마다 코드실행하고 싶을 때
@@ -39,16 +40,21 @@ function Detail(props) {
       console.log(2);
     }, 2000);
 
+    let gap = setTimeout(() => {
+      setFade('end');
+    }, 100);
+
     if (isNaN(inputVal)) alert('숫자만 입력해주세요.');
 
     return () => {
       console.log(1);
       clearTimeout(removeTimer); // clearTimeout() : 타이머 제거하는 함수
+      clearTimeout(gap);
     };
-  }, [inputVal]);
+  }, [inputVal, fade]);
 
   return (
-    <div className="container">
+    <div className={`container start ${fade}`}>
       {/* {timer ? <div className="alert alert-warning">2초 이내 구매시 할인</div> : null}
       {count}
       <button onClick={() => { setCount(count + 1); }}>버튼</button> */}
@@ -108,7 +114,18 @@ function Detail(props) {
 }
 
 function TabContent({ tab }) {
-  return [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab];
+  let [fade2, setFade2] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade2('end');
+    }, 100);
+
+    return () => {
+      setFade2('');
+    };
+  }, [tab]);
+  return <div className={`start ${fade2}`}>{[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab]}</div>;
 }
 
 export default Detail;
