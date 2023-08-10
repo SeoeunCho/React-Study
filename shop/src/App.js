@@ -5,6 +5,7 @@ import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
+import Cart from './pages/Cart';
 import axios from 'axios';
 
 export let Context1 = createContext();
@@ -32,6 +33,7 @@ function App() {
               }}>
               About
             </Nav.Link>
+            <Nav.Link href="/cart">Cart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -126,6 +128,8 @@ function App() {
             </Context1.Provider>
           }
         />
+
+        <Route path="/cart" element={<Cart />}></Route>
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>member</div>} />
