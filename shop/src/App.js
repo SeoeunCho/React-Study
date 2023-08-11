@@ -11,12 +11,18 @@ import axios from 'axios';
 export let Context1 = createContext();
 
 function App() {
+  let obj = { name: 'kim' };
+  localStorage.setItem('data', JSON.stringify(obj));
+  let pick = localStorage.getItem('data');
+  console.log(JSON.parse(pick));
+
   let [shoes, setShoes] = useState(data);
+  let [extra] = useState([10, 11, 12]);
   let navigate = useNavigate();
+
   let [count, setCount] = useState(1);
   let [more, setMore] = useState(true);
   let [load, setLoad] = useState(false);
-  let [extra] = useState([10, 11, 12]);
 
   return (
     <div className="App">
