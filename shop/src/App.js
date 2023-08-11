@@ -7,6 +7,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
 import Cart from './pages/Cart';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 
 export let Context1 = createContext();
 
@@ -19,16 +20,25 @@ function App() {
   let [extra] = useState([10, 11, 12]);
   let navigate = useNavigate();
 
+  let result = useQuery(
+    'userName',
+    () =>
+      axios.get('https://codingapple1.github.io/userdata.json').then((res) => {
+        console.log('요청됨');
+        return res.data;
+      }),
+    { staleTime: 2000 }
+  );
+
   let [count, setCount] = useState(1);
   let [more, setMore] = useState(true);
   let [load, setLoad] = useState(false);
   let watchedList = localStorage.getItem('watched');
   watchedList = JSON.parse(watchedList);
-  console.log('watchedList', watchedList);
 
   return (
     <div className="App">
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar bg="light" data-bs-theme="light">
         <Container>
           <Navbar.Brand href="/">Reactshop</Navbar.Brand>
           <Nav className="me-auto">
@@ -42,6 +52,11 @@ function App() {
               About
             </Nav.Link>
             <Nav.Link href="/cart">Cart</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto">
+            {result.isLoading && '로딩중'}
+            {result.error && '에러남'}
+            {result.data && result.data.name}
           </Nav>
         </Container>
       </Navbar>
