@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Nav } from 'react-bootstrap';
 import { Context1 } from './../App.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCart } from './../store.js';
 
 /* let Btn = styled.button`
   background: ${(props) => props.bgColor};
@@ -20,6 +22,9 @@ let Box = styled.div`
 `; */
 
 function Detail(props) {
+  let state = useSelector((state) => state);
+  let dispatch = useDispatch();
+
   let { extra } = useContext(Context1);
 
   let [count, setCount] = useState(0);
@@ -78,7 +83,14 @@ function Detail(props) {
           <h4 className="pt-5">{detailData.title}</h4>
           <p>{detailData.content}</p>
           <p>{detailData.price}</p>
-          <button className="btn btn-danger">주문하기</button>
+          <Link
+            className="btn btn-danger"
+            to="/cart"
+            onClick={() => {
+              dispatch(addCart({ id: 3, name: detailData.title, count: 1 }));
+            }}>
+            주문하기
+          </Link>
         </div>
       </div>
 
