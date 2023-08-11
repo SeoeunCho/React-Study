@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
@@ -11,10 +11,9 @@ import axios from 'axios';
 export let Context1 = createContext();
 
 function App() {
-  let obj = { name: 'kim' };
-  localStorage.setItem('data', JSON.stringify(obj));
-  let pick = localStorage.getItem('data');
-  console.log(JSON.parse(pick));
+  useEffect(() => {
+    if (!watchedList) localStorage.setItem('watched', JSON.stringify([]));
+  }, []);
 
   let [shoes, setShoes] = useState(data);
   let [extra] = useState([10, 11, 12]);
@@ -23,6 +22,9 @@ function App() {
   let [count, setCount] = useState(1);
   let [more, setMore] = useState(true);
   let [load, setLoad] = useState(false);
+  let watchedList = localStorage.getItem('watched');
+  watchedList = JSON.parse(watchedList);
+  console.log('watchedList', watchedList);
 
   return (
     <div className="App">
@@ -48,7 +50,25 @@ function App() {
           path="/"
           element={
             <>
-              <div className="main-bg"></div>
+              <div className="main-bg">
+                <div className="recent-list">
+                  <h3>최근 본 상품</h3>
+                  {watchedList
+                    ? watchedList.map((el, i) => {
+                        return (
+                          <div
+                            key={i}
+                            onClick={() => {
+                              navigate(`/detail/${el.id}`);
+                            }}>
+                            <img src={`https://codingapple1.github.io/shop/shoes${el.id + 1}.jpg`} width="80%" alt="" />
+                            <p>{el.title}</p>
+                          </div>
+                        );
+                      })
+                    : null}
+                </div>
+              </div>
               <Button
                 variant="secondary"
                 className="mt-4"
@@ -63,7 +83,7 @@ function App() {
                 <div className="row">
                   {load ? <Loading /> : ''}
                   {shoes.map((el) => {
-                    return <Card shoes={el} idx={el.id} key={el.id}></Card>;
+                    return <Card shoes={el} idx={el.id} key={el.id} navigate={navigate}></Card>;
                   })}
                 </div>
               </div>
@@ -152,7 +172,11 @@ function App() {
 
 function Card(props) {
   return (
-    <div className="col-md-4">
+    <div
+      className="col-md-4"
+      onClick={() => {
+        props.navigate(`/detail/${props.idx}`);
+      }}>
       <img src={`https://codingapple1.github.io/shop/shoes${props.idx + 1}.jpg`} width="80%" alt="" />
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price.toLocaleString()}원</p>

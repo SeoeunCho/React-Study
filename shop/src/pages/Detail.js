@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Nav } from 'react-bootstrap';
 import { Context1 } from './../App.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addCart } from './../store.js';
 
 /* let Btn = styled.button`
@@ -22,7 +22,6 @@ let Box = styled.div`
 `; */
 
 function Detail(props) {
-  let state = useSelector((state) => state);
   let dispatch = useDispatch();
 
   let { extra } = useContext(Context1);
@@ -30,6 +29,7 @@ function Detail(props) {
   let [count, setCount] = useState(0);
   let [timer, setTimer] = useState(true);
   let [inputVal, setInputVal] = useState('');
+
   let { id } = useParams();
   let detailData = props.shoes.find((el) => el.id === Number(id));
   let [tab, setTab] = useState(0);
@@ -43,9 +43,21 @@ function Detail(props) {
    *                                                useEffect 실행 전에 뭔가 실행하고 싶을 때 return() => {}
    */
   useEffect(() => {
+    let pick = localStorage.getItem('watched');
+    pick = JSON.parse(pick);
+    pick.unshift(detailData);
+
+    // 중복제거
+    pick = [...new Set(pick.map(JSON.stringify))].map(JSON.parse);
+
+    localStorage.setItem('watched', JSON.stringify(pick));
+
+    return () => {};
+  }, [detailData]);
+
+  useEffect(() => {
     let removeTimer = setTimeout(() => {
       setTimer(false);
-      console.log(2);
     }, 2000);
 
     let gap = setTimeout(() => {
@@ -55,7 +67,6 @@ function Detail(props) {
     if (isNaN(inputVal)) alert('숫자만 입력해주세요.');
 
     return () => {
-      console.log(1);
       clearTimeout(removeTimer); // clearTimeout() : 타이머 제거하는 함수
       clearTimeout(gap);
     };
