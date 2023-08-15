@@ -36,6 +36,62 @@ function App() {
   let watchedList = localStorage.getItem('watched');
   watchedList = JSON.parse(watchedList);
 
+  let sortFunc = () => {
+    let copy = [...shoes];
+    copy.sort((a, b) => (a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1));
+    setShoes(copy);
+  };
+
+  let moreFunc = () => {
+    count++;
+    setCount(count);
+    setLoad(true);
+
+    /** AJAX : 서버에 GET,POST 요청할 때 새로고침 없이 데이터를 주고받을 수 있게 도와주는 브라우저 기능
+     *
+     * AJAX로 GET/POST 요청하는 방법
+     *
+     * 1. XMLHttpRequest 라는 옛날 문법 사용
+     * 2. fetch() 라는 최신문법 사용
+     * 3. axios 같은 외부 라이브러리 사용
+     *
+     * axios 라이브러리 : JSON -> object/array 변환작업을 자동으로 해줌
+     * POST 요청 : axios.post('URL', { name: 'kim' }).then(() => {});
+     */
+
+    axios
+      .get(`https://codingapple1.github.io/shop/data${count}.json`)
+      .then((res) => {
+        if (res) {
+          setTimeout(() => {
+            setLoad(false);
+          }, 1000);
+        }
+
+        if (count === 2) {
+          let copy = [...shoes, ...res.data];
+          setShoes(copy);
+        } else if (count === 3) {
+          let copy = [...shoes, ...res.data];
+          setShoes(copy);
+          setMore(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    /** fetch() : 자바스크립트 함수
+     * axios와 다르게 JSON -> object/array 변환작업을 해주지 않아서 직접 바꾸는 작업이 필요함
+     * 예시)
+     * fetch('URL').then((res) => res.json()).then((res) => console.log(res)); */
+
+    /** Promise.all : 동시에 여러 개의 AJAX 요청 할 때
+     * 예시)
+     * Promise.all([axios.get('/url1'), axios.get('/url2')]).then(() => {});
+     */
+  };
+
   return (
     <div className="App">
       <Navbar bg="light" data-bs-theme="light">
@@ -84,14 +140,7 @@ function App() {
                     : null}
                 </div>
               </div>
-              <Button
-                variant="secondary"
-                className="mt-4"
-                onClick={() => {
-                  let copy = [...shoes];
-                  copy.sort((a, b) => (a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1));
-                  setShoes(copy);
-                }}>
+              <Button variant="secondary" className="mt-4" onClick={sortFunc}>
                 이름순
               </Button>
               <div className="container pt-4">
@@ -102,60 +151,7 @@ function App() {
                   })}
                 </div>
               </div>
-              {more ? (
-                <Button
-                  onClick={() => {
-                    count++;
-                    setCount(count);
-                    setLoad(true);
-
-                    /** AJAX : 서버에 GET,POST 요청할 때 새로고침 없이 데이터를 주고받을 수 있게 도와주는 브라우저 기능
-                     *
-                     * AJAX로 GET/POST 요청하는 방법
-                     *
-                     * 1. XMLHttpRequest 라는 옛날 문법 사용
-                     * 2. fetch() 라는 최신문법 사용
-                     * 3. axios 같은 외부 라이브러리 사용
-                     *
-                     * axios 라이브러리 : JSON -> object/array 변환작업을 자동으로 해줌
-                     * POST 요청 : axios.post('URL', { name: 'kim' }).then(() => {});
-                     */
-
-                    axios
-                      .get(`https://codingapple1.github.io/shop/data${count}.json`)
-                      .then((res) => {
-                        if (res) {
-                          setTimeout(() => {
-                            setLoad(false);
-                          }, 1000);
-                        }
-
-                        if (count === 2) {
-                          let copy = [...shoes, ...res.data];
-                          setShoes(copy);
-                        } else if (count === 3) {
-                          let copy = [...shoes, ...res.data];
-                          setShoes(copy);
-                          setMore(false);
-                        }
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-
-                    /** fetch() : 자바스크립트 함수
-                     * axios와 다르게 JSON -> object/array 변환작업을 해주지 않아서 직접 바꾸는 작업이 필요함
-                     * 예시)
-                     * fetch('URL').then((res) => res.json()).then((res) => console.log(res)); */
-
-                    /** Promise.all : 동시에 여러 개의 AJAX 요청 할 때
-                     * 예시)
-                     * Promise.all([axios.get('/url1'), axios.get('/url2')]).then(() => {});
-                     */
-                  }}>
-                  더보기
-                </Button>
-              ) : null}
+              {more ? <Button onClick={moreFunc}>더보기</Button> : null}
             </>
           }
         />
