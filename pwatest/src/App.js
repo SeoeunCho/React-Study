@@ -18,7 +18,7 @@ function App() {
         }}
       />
       {isPending
-        ? '로딩중'
+        ? '로딩중임'
         : a.map(() => {
             return <div>{state}</div>;
           })}
