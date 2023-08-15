@@ -1,15 +1,18 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createContext, useEffect, useState } from 'react';
+import { lazy, Suspense, createContext, useEffect, useState } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
-import Detail from './pages/Detail';
-import Cart from './pages/Cart';
+// import Detail from './pages/Detail';
+// import Cart from './pages/Cart';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 
 export let Context1 = createContext();
+
+const Detail = lazy(() => import('./pages/Detail'));
+const Cart = lazy(() => import('./pages/Cart'));
 
 function App() {
   useEffect(() => {
@@ -116,67 +119,70 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <div className="main-bg">
-                <div className="recent-list">
-                  <h3>최근 본 상품</h3>
-                  {watchedList
-                    ? watchedList.map((el, i) => {
-                        return (
-                          <div
-                            key={i}
-                            onClick={() => {
-                              navigate(`/detail/${el.id}`);
-                            }}>
-                            <img src={`https://codingapple1.github.io/shop/shoes${el.id + 1}.jpg`} width="80%" alt="" />
-                            <p>{el.title}</p>
-                          </div>
-                        );
-                      })
-                    : null}
+
+      <Suspense fallback={<div>로딩중임</div>}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <div className="main-bg">
+                  <div className="recent-list">
+                    <h3>최근 본 상품</h3>
+                    {watchedList
+                      ? watchedList.map((el, i) => {
+                          return (
+                            <div
+                              key={i}
+                              onClick={() => {
+                                navigate(`/detail/${el.id}`);
+                              }}>
+                              <img src={`https://codingapple1.github.io/shop/shoes${el.id + 1}.jpg`} width="80%" alt="" />
+                              <p>{el.title}</p>
+                            </div>
+                          );
+                        })
+                      : null}
+                  </div>
                 </div>
-              </div>
-              <Button variant="secondary" className="mt-4" onClick={sortFunc}>
-                이름순
-              </Button>
-              <div className="container pt-4">
-                <div className="row">
-                  {load ? <Loading /> : ''}
-                  {shoes.map((el) => {
-                    return <Card shoes={el} idx={el.id} key={el.id} navigate={navigate}></Card>;
-                  })}
+                <Button variant="secondary" className="mt-4" onClick={sortFunc}>
+                  이름순
+                </Button>
+                <div className="container pt-4">
+                  <div className="row">
+                    {load ? <Loading /> : ''}
+                    {shoes.map((el) => {
+                      return <Card shoes={el} idx={el.id} key={el.id} navigate={navigate}></Card>;
+                    })}
+                  </div>
                 </div>
-              </div>
-              {more ? <Button onClick={moreFunc}>더보기</Button> : null}
-            </>
-          }
-        />
+                {more ? <Button onClick={moreFunc}>더보기</Button> : null}
+              </>
+            }
+          />
 
-        <Route
-          path="/detail/:id"
-          element={
-            <Context1.Provider value={{ extra, shoes }}>
-              <Detail shoes={shoes} />
-            </Context1.Provider>
-          }
-        />
+          <Route
+            path="/detail/:id"
+            element={
+              <Context1.Provider value={{ extra, shoes }}>
+                <Detail shoes={shoes} />
+              </Context1.Provider>
+            }
+          />
 
-        <Route path="/cart" element={<Cart />}></Route>
+          <Route path="/cart" element={<Cart />}></Route>
 
-        <Route path="/about" element={<About />}>
-          <Route path="member" element={<div>member</div>} />
-          <Route path="location" element={<div>location</div>} />
-        </Route>
-        <Route path="/event" element={<Event />}>
-          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
-          <Route path="two" element={<div>생일기념 쿠폰받기</div>}></Route>
-        </Route>
-        <Route path="*" element={<div>404 없는페이지입니다.</div>} />
-      </Routes>
+          <Route path="/about" element={<About />}>
+            <Route path="member" element={<div>member</div>} />
+            <Route path="location" element={<div>location</div>} />
+          </Route>
+          <Route path="/event" element={<Event />}>
+            <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
+            <Route path="two" element={<div>생일기념 쿠폰받기</div>}></Route>
+          </Route>
+          <Route path="*" element={<div>404 없는페이지입니다.</div>} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
